@@ -1,5 +1,10 @@
 
 package br.com.fatec.model;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -100,12 +105,37 @@ public class Persistencia {
     }
     public void  listarProduto(Produto product){
         if(produto.isEmpty()){
-         JOptionPane.showMessageDialog(null,"Não contem resgistros");
+         JOptionPane.showMessageDialog(null,"Não contem registros");
         }else{
          JOptionPane.showMessageDialog(null, produto);
         }
-           
-  
     }
     
+    public static void importar(String nomeDoArquivo){
+        try {
+            FileReader arq = new FileReader(nomeDoArquivo);
+            BufferedReader lerArq = new BufferedReader(arq);
+            String id, nome, login, senha;//criando strings para armazenamento das informações do usuario
+            id = lerArq.readLine();
+            while (id != null) {
+                nome = lerArq.readLine();
+                login = lerArq.readLine();
+                senha = lerArq.readLine();
+                lista.add(new Usuario(nome,login,senha));
+                id = lerArq.readLine();
+                }
+            arq.close();} 
+        catch (IOException e) {
+            System.err.printf("Erro na abertura do arquivo: %s.",e.getMessage());
 }
+    }
+    
+    public static void exportar(String nomeDoArquivo) throws IOException{
+        FileWriter arq = new FileWriter(nomeDoArquivo);
+        PrintWriter gravarArq = new PrintWriter(arq);
+        for(Usuario user:lista){
+            gravarArq.print(user);
+        }
+        gravarArq.close();
+    }
+    }
